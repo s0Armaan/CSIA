@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Recommendation Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+  <script defer src="app.js"></script>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Navigation -->
+  <nav class="bg-white shadow-md">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex justify-between">
+        <div class="flex space-x-7">
+          <a href="#" class="flex items-center py-4 px-2">
+            <span class="font-semibold text-gray-500 text-lg">Movie Recommendation Dashboard</span>
+          </a>
+          <div class="hidden md:flex items-center space-x-1">
+            <a href="#" class="py-4 px-2 text-gray-500 border-b-4 border-blue-500 font-semibold ">Home</a>
+            <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-500 transition duration-300">About</a>
+            <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-500 transition duration-300">Contact</a>
+          </div>
+        </div>
+        <!-- Search Input -->
+        <div class="md:flex items-center">
+          <input type="search" name="search" placeholder="Search Movies..." class="w-full bg-gray-200 rounded border border-gray-300 focus:outline-none focus:border-blue-500 text-base px-4 py-2">
+          <button class="text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded text-sm ml-4">FILTER</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container mx-auto my-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Recommendations -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-medium mb-4">Mood Based Recommendation</h2>
+        <div id="mood-recs"><!-- Mood recommendations go here --></div>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-medium mb-4">Time-Based Recommendation</h2>
+        <div id="time-recs"><!-- Time recommendations go here --></div>
+      </div>
+      <!-- Watched Movies -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-medium mb-4">Watched Movies</h2>
+        <ul id="watched-movies"><!-- Watched movies list goes here --></ul>
+      </div>
+      <!-- Fun Facts and Trivia -->
+      <div class="bg-white p-6 rounded-lg shadow-lg col-span-1 md:col-span-3">
+        <h2 class="text-xl font-medium mb-4">Fun Facts</h2>
+        <p><!-- Fun facts content goes here --></p>
+        <h2 class="text-xl font-medium mb-4 mt-6">Trivia</h2>
+        <p><!-- Trivia content goes here --></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-6">
+      <p class="text-gray-500 text-sm text-center">© 2024 Movie Recommendation Dashboard. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
+

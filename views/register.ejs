@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation Dashboard - Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Style of the page */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('/static/login_background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .card {
+            background: black; 
+            color: white; 
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+        }
+        .login-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .input-field {
+            border: 1px solid #D1D5DB;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            width: 100%;
+            color: black; 
+        }
+        .login-button {
+            background-color: #4F46E5;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .login-button:hover {
+            background-color: #4F46E5;
+        }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="login-container card">
+        <h1 class="login-title">Register to Popcorn Preferences</h1>
+        <form action="/register" method="POST">
+            <input type="text" name="username" placeholder="Username" class="input-field" required>
+            <input type="text" name="email" placeholder="Email" class="input-field" required>
+            <input type="password" name="password" placeholder="Password" class="input-field" required>
+            <button type="submit" class="login-button">Register</button>
+        </form>
+    </div>
+</body>
+</html>

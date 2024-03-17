@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "../bin"
+		},
+		{
+			"path": "../lib"
+		},
+		{
+			"path": "../node_modules"
+		},
+		{
+			"path": "../src"
+		},
+		{
+			"path": "../static"
+		},
+		{
+			"path": "."
+		}
+	]
+}
