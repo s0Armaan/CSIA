@@ -68,8 +68,15 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
     res.render('login');
 });
+app.get('/home', (req, res) => {
+  fetchPopularMovies().then(movies => {
+    res.render('home', { movies: movies });
+  }).catch(err => {
+    console.error('Error fetching popular movies:', err);
+    res.render('home', { movies: [] }); // Send empty array if there's an error
+  });
+});
 
-app.post('/login', (req, res) => {
     const { username, password } = req.body;
   
     const sql = 'SELECT * FROM users WHERE username = ? OR email = ? AND password = ?';
