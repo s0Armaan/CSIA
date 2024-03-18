@@ -147,14 +147,20 @@
                                 <button class="tab rounded-full py-2 px-6 text-sm font-medium">Week</button>
                                 <button class="tab rounded-full py-2 px-6 text-sm font-medium">Month</button>
                             </div>
-                            <div class="card p-6 rounded-xl animated scaleIn">
-                                <!-- Leaderboard -->
-                                <div class="flex justify-between items-center mb-4">
-                                    <div class="font-medium text-gray-800">1</div>
-                                    <div class="star-rating text-lg font-semibold">⭐ 10.0</div>
-                                </div>
-                                <!-- ... -->
-                            </div>
+<!-- Leaderboard -->
+<div class="card p-6 rounded-xl animated scaleIn">
+  <% if (movies && movies.length > 0) { %>
+    <% movies.slice(0, 10).forEach(function(movie, index) { %>
+      <div class="flex justify-between items-center mb-4">
+        <img src="https://image.tmdb.org/t/p/w500<%= movie.poster_path %>" alt="<%= movie.title %>" class="w-8 h-12">
+        <div class="font-medium text-gray-800"><%= index + 1 %>. <%= movie.title %></div>
+        <div class="star-rating text-lg font-semibold">⭐ <%= movie.vote_average %>/10</div>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <div>No movies to display.</div>
+  <% } %>
+</div>
                         </div>
                     </div>
 
