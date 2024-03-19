@@ -89,42 +89,6 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
-// app.get('/home', (req, res) => {
-//   fetchPopularMovies().then(movies => {
-//     res.render('home', { movies: movies });
-//   }).catch(err => {
-//     console.error('Error fetching popular movies:', err);
-//     res.render('home', { movies: [] }); // Send empty array if there's an error
-//   });
-// });
-
-// app.get('/home', (req, res) => {
-//   const movieId = '787699'; // Replace with dynamic movie ID logic
-//   fetchMovieRecommendations(movieId).then(recommendations => {
-//     res.render('home', { recommendations: recommendations });
-//   }).catch(err => {
-//     console.error('Error fetching movie recommendations:', err);
-//     res.render('home', { recommendations: [] }); // Send empty array if there's an error
-//   });
-// });
-
-// app.get('/home', (req, res) => {
-//   const movieId = '787699'; // Example movie ID, replace with dynamic logic if needed
-  
-//   // Fetch popular movies first
-//   fetchPopularMovies().then(movies => {
-//     // Then fetch movie recommendations
-//     fetchMovieRecommendations(movieId).then(recommendations => {
-//       // Render home view with both movies and recommendations
-//       res.render('home', { recommendations: recommendations, movies: movies });
-//     });
-//   }).catch(err => {
-//     // Log error and render home with what we have (movies might be an empty array if the first call failed)
-//     console.error('Error fetching data:', err);
-//     res.render('home', { movies: [], recommendations: [] });
-//   });
-// });
-
 app.get('/home', (req, res) => {
   const movieId = '787699'; // Example movie ID, replace with dynamic logic if needed
 
