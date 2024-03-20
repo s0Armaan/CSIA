@@ -2,6 +2,9 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
 const fetch = require('node-fetch');
+const sqlite3 = require('sqlite3').verbose();
+const app = express();
+const PORT = 3000;
 
 function fetchPopularMovies() {
   const url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
@@ -88,11 +91,6 @@ async function fetchMovieDetails(movie) {
     console.error('error fetching movie details:', err);
   }
 }
-  
-const sqlite3 = require('sqlite3').verbose();
-
-const app = express();
-const PORT = 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -100,8 +98,7 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-const db = new sqlite3.Database('database.db');
+const db = new sqlite3.Database('other/database.db');
 db.serialize(() => {
   db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, username TEXT, password TEXT)");
 });
