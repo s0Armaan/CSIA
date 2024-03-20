@@ -1,5 +1,12 @@
 <html lang="en">
 <head>
+    <script src="src/scripts.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popcorn Preferences</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body { 
             font-family: 'Roboto', sans-serif; 
@@ -110,6 +117,22 @@
     </div>
 
     <div class="container mx-auto px-4 py-8">
+        <form action="/search" method="GET">
+            <div class="mt-8 grid grid-cols-3 gap-8">
+                <% if (recommendations) { %>
+                    <% recommendations.forEach(function(recommendation) { %>
+                    <div class="bg-gray-50 p-4 rounded-xl animated slideIn">
+                        <button type="submit" name="image" value="<%= recommendation.title %>">
+                            <img src="https://image.tmdb.org/t/p/w500<%= recommendation.poster_path %>" alt="<%= recommendation.title %>" class="w-full h-auto rounded-lg mb-4">
+                        </button>                                            
+                        <div name="title" id=class="text-center text-sm"><%= recommendation.title %></div>
+                    </div>
+                    <% }) %>
+                <% } else { %>
+                    <div>No movies to display.</div>
+                <% } %>
+            </div>
+        </form>
         <!-- Page Content -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white shadow-xl rounded-lg overflow-hidden mb-8">
@@ -136,25 +159,25 @@
     </div>
 
     <script>
-        // Assuming your EJS template provides the movie ID as `movie.id`
-        const movieId = '<%= movie.id %>'; // This will be dynamically filled by your EJS template server-side
-        const apiKey = 'YOUR_TMDB_API_KEY'; // Replace with your actual TMDB API key
-        const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`;
+        // // Assuming your EJS template provides the movie ID as `movie.id`
+        // const movieId = '<%= movie.id %>'; // This will be dynamically filled by your EJS template server-side
+        // const apiKey = 'YOUR_TMDB_API_KEY'; // Replace with your actual TMDB API key
+        // const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`;
 
-        fetch(url)
-            .then(res => res.json())
-            .then(movieDetails => {
-                // Instead of console.log, you use the data to display on the page
-                displayMovieDetails(movieDetails);
-            })
-            .catch(err => console.error('error:' + err));
+        // fetch(url)
+        //     .then(res => res.json())
+        //     .then(movieDetails => {
+        //         // Instead of console.log, you use the data to display on the page
+        //         displayMovieDetails(movieDetails);
+        //     })
+        //     .catch(err => console.error('error:' + err));
 
-        function displayMovieDetails(details) {
-            // Here you can access the movie details and render them in your HTML
-            // For example, if you have an element with the ID 'movie-title' in your HTML, you can do:
-            document.getElementById('movie-title').textContent = details.title;
-            // Repeat for other elements like overview, poster, rating etc.
-        }
+        // function displayMovieDetails(details) {
+        //     // Here you can access the movie details and render them in your HTML
+        //     // For example, if you have an element with the ID 'movie-title' in your HTML, you can do:
+        //     document.getElementById('movie-title').textContent = details.title;
+        //     // Repeat for other elements like overview, poster, rating etc.
+        // }
     </script>
 </body>
 </html>

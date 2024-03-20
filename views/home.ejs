@@ -102,26 +102,15 @@
             <div class="bg-white shadow-xl rounded-xl overflow-hidden">
                 <!-- Top Bar -->
                 <div class="border-b border-gray-300 bg-gray-50 px-6 py-4">
-                    <div class="flex justify-between items-center">
-                        <div class="flex space-x-4">
-                                </div>
-                                <div class="flex space-x-4 items-center">
-                                    <input type="text" id="search-input" placeholder="Search Movies..." class="search-bar p-3 rounded-full focus:ring-2 focus:ring-blue-500 transition duration-200 w-96">
-                                    <button id="search-button" class="search-button text-white py-3 px-6 rounded-full font-medium transition duration-200 hover:bg-red-600">FILTER</button>
-                                </div>
+                    <form action="/search" method="GET">
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-4 items-center w-full">
+                                <input name="searchbar" type="text" id="search-input" placeholder="Search Movies..." class="search-bar p-3 rounded-full focus:ring-2 focus:ring-blue-500 transition duration-200 w-full">
+                                <button id="search-button" class="search-button text-white py-3 px-6 rounded-full font-medium transition duration-200 hover:bg-blue-600" style="background-color: blue;">SEARCH</button>
                             </div>
                         </div>
-
-                        <div class="border-b border-gray-300 border-solid border-2 px-6 py-4">
-                            <div class="flex justify-between items-center">
-                                <div class="flex space-x-4">
-                                </div>
-                                <div class="flex space-x-4 items-center w-full"> 
-                                    <input type="text" id="search-input" placeholder="Search Similar Movies..." class="search-bar p-3 rounded-full focus:ring-2 focus:ring-blue-500 transition duration-200 w-full"> <!-- Kept w-full -->
-                                </div>
-                            </div>
-                        </div>
-                        
+                    </form>
+                </div>
 
                 <script src="src/scripts.js"></script>
             </body>           
@@ -152,19 +141,28 @@
                                     <div class="card-title text-sm font-semibold">Thriller</div>
                                 </div>
                             </div>
-                            <div class="mt-8 grid grid-cols-3 gap-8">
-                                
-                                <% if (recommendations) { %>
-                                    <% recommendations.forEach(function(recommendation) { %>
-                                    <div class="bg-gray-50 p-4 rounded-xl animated slideIn">
-                                        <img src="https://image.tmdb.org/t/p/w500<%= recommendation.poster_path %>" alt="Recommendation image" class="w-full h-auto rounded-lg mb-4">
-                                        <div class="text-center text-sm"><%= recommendation.title %></div>
-                                    </div>
-                                    <% }) %>
-                                <% } else { %>
-                                    <div>No movies to display.</div>
-                                <% } %>
+                            <div class="flex justify-between items-center" style="margin-top: 25px">
+                                <div class="flex space-x-4 items-center w-full"> 
+                                    <input type="text" id="search-input" placeholder="Search Similar Movies..." class="search-bar p-3 rounded-full focus:ring-2 focus:ring-blue-500 transition duration-200 w-full" style="background-color: #f3f4f6;">
+                                    <button id="search-button" class="search-button text-white py-3 px-6 rounded-full font-medium transition duration-200 hover:bg-red-600">FILTER</button> 
+                                </div>
                             </div>
+                            <form action="/search" method="GET">
+                                <div class="mt-8 grid grid-cols-3 gap-8">
+                                    <% if (recommendations) { %>
+                                        <% recommendations.forEach(function(recommendation) { %>
+                                        <div class="bg-gray-50 p-4 rounded-xl animated slideIn">
+                                            <button type="submit" name="image" value="<%= recommendation.title %>">
+                                                <img src="https://image.tmdb.org/t/p/w500<%= recommendation.poster_path %>" alt="<%= recommendation.title %>" class="w-full h-auto rounded-lg mb-4">
+                                            </button>                                            
+                                            <div name="title" id=class="text-center text-sm"><%= recommendation.title %></div>
+                                        </div>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <div>No movies to display.</div>
+                                    <% } %>
+                                </div>
+                            </form>
                         </div>
                         
                         <!-- Right Section -->
@@ -181,7 +179,7 @@
                                 <div class="flex justify-between items-center mb-4">
                                     <img src="https://image.tmdb.org/t/p/w500<%= movie.poster_path %>" alt="<%= movie.title %>" class="w-8 h-12">
                                     <div class="font-medium text-gray-800"><%= index + 1 %>. <%= movie.title %></div>
-                                    <div class="star-rating text-lg font-semibold">⭐ <%= movie.vote_average %>/10</div>
+                                    <div class="star-rating text-lg font-semibold">⭐ <%= Math.round(movie.vote_average * 10) / 10 %>/10</div>
                                 </div>
                                 <% }) %>
                             <% } else { %>
@@ -221,6 +219,14 @@
             // Perform search functionality here
             console.log('Search term:', searchTerm);
         });
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            if (error) {
+            alert(error);
+            }
+        };
     </script>
 
 </body>

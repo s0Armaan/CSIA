@@ -31,11 +31,43 @@ function fetchMovieRecommendations(movieId) {
 
   return fetch(url, options)
     .then(res => res.json())
-    .then(json => {
-      console.log(json); // Log to see if the response is as expected
-      return json.results;
-    })
+    .then(json => json.results)
     .catch(err => console.error('error fetching movie recommendations:', err));
+}
+
+function fetchMovieDetails(movie) {
+  const url = 'https://api.themoviedb.org/3/search/movie?query=' + movie + '&include_adult=true&language=en-US&page=1';
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhOTY0MjBmM2IwNDFlMDkxMjgyZmVjZGRlMjU2NTAzZiIsInN1YiI6IjY1YjBlNmI5ZWEzN2UwMDE5M2U0NjI5NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Bg_SH3Y0udfbjbl0qYoxzAEj2z0_35g26sXN6mjxZnQ'
+    }
+  };
+
+  fetch(url, options)
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error('error:' + err));
+}
+
+async function fetchMovieDetails(movie) {
+  const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(movie)}&include_adult=false&language=en-US&page=1`;
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhOTY0MjBmM2IwNDFlMDkxMjgyZmVjZGRlMjU2NTAzZiIsInN1YiI6IjY1YjBlNmI5ZWEzN2UwMDE5M2U0NjI5NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Bg_SH3Y0udfbjbl0qYoxzAEj2z0_35g26sXN6mjxZnQ'
+    }
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    return data; // This returns the whole JSON response including the 'results' array
+  } catch (err) {
+    console.error('error fetching movie details:', err);
+  }
 }
   
 const sqlite3 = require('sqlite3').verbose();
@@ -49,7 +81,6 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.use(express.static('static'));
 
 const db = new sqlite3.Database('database.db');
 db.serialize(() => {
@@ -97,7 +128,7 @@ app.get('/home', (req, res) => {
     fetchMovieRecommendations(movieId)
   ])
   .then(([movies, recommendations]) => {
-    console.log(movies, recommendations); // Log to verify data integrity
+    // console.log(movies, recommendations); // Log to verify data integrity
     res.render('home', { movies: movies, recommendations: recommendations });
   })
   .catch(err => {
@@ -106,6 +137,61 @@ app.get('/home', (req, res) => {
   });
 });
 
+app.get('/search', (req, res) => {
+  let name;
+  if (req.query.image) {
+    name = req.query.image;
+  } else if (req.query.searchbar) {
+    name = req.query.searchbar;
+  };
+  
+  console.log('User search input:', name); // Log the user search input (for debugging purposes)
+
+  (async () => {
+    const data3 = await fetchMovieDetails(name);
+    fetchMovieRecommendations(query) // Implement this function if not already present
+        .then(movieId => {
+          
+        })
+        .then(recommendations => {
+            res.json({ recommendations: recommendations }); // Send recommendations back to the client
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            res.status(500).json({ error: 'Failed to fetch recommendations' });
+        });
+    if (data3 && data3.results) {
+      let movie = data3.results[0];
+      console.log(movie);
+      if (movie === null || movie === undefined) {
+        movie = "No results found or there was an error fetching the details.";
+        res.redirect('/home?error=Movie+not+found');
+      } else {
+        res.render('search', { movie: movie }); // Safely access the first item in results
+        console.log(movie);  
+      }
+    } else {
+      console.log("No results found or there was an error fetching the details.");
+    }
+  })();
+});
+
+app.get('/image_search', (req, res) => {
+  const name = req.query.movieTitle;
+  console.log('User search input:', name); // Log the user search input (for debugging purposes)
+
+  (async () => {
+    const data3 = await fetchMovieDetails(name);
+    if (data3 && data3.results) {
+      let movie = data3.results[0];
+      res.render('search', { movie: movie }); // Safely access the first item in results
+      console.log(movie);
+    } else {
+      res.render('search', { movie: movie });
+      console.log("No results found or there was an error fetching the details.");
+    }
+  })();
+});
 
 app.post('/login', (req, res) => {
 
@@ -125,10 +211,6 @@ app.post('/login', (req, res) => {
   });
 
 });
-
-// app.get('/home', (req, res) => {
-//     res.render('home');
-// });
 
 app.get('/frontpage', (req, res) => {
   res.render('frontpage');
@@ -152,8 +234,6 @@ app.post('/register', (req, res) => {
       }
     });
 });
-// Serve static files in the public directory
-// app.use(express.static(path.join(__dirname, 'static' )));
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}/`);
@@ -169,17 +249,3 @@ app.get('/movie/:id', (req, res) => {
   });
 });
 
-function fetchMovieDetails(movieId) {
-  const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`;
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhOTY0MjBmM2IwNDFlMDkxMjgyZmVjZGRlMjU2NTAzZiIsInN1YiI6IjY1YjBlNmI5ZWEzN2UwMDE5M2U0NjI5NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Bg_SH3Y0udfbjbl0qYoxzAEj2z0_35g26sXN6mjxZnQ' // Make sure to replace with your actual API key
-    }
-  };
-
-  return fetch(url, options)
-    .then(res => res.json())
-    .catch(err => console.error('error fetching movie details:', err));
-}

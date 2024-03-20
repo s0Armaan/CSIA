@@ -10,7 +10,7 @@ function fetchPopularMovies() {
     }
   };
 
-  return fetch(url, options)
+  fetch(url, options)
     .then(res => res.json())
     .then(json => console.log(json))
     .catch(err => console.error('error:' + err));
@@ -26,17 +26,80 @@ function fetchMovieRecommendations(movieId) {
     }
   };
 
-  return fetch(url, options)
+  fetch(url, options)
     .then(res => res.json())
     .then(json => console.log(json))
     .catch(err => console.error('error:' + err));
 }
 
-let data = fetchPopularMovies();
-let results = data.results;
+// function fetchMovieDetails(movie) {
+//   const url = 'https://api.themoviedb.org/3/search/movie?query=' + movie + '&include_adult=true&language=en-US&page=1';
+//   const options = {
+//     method: 'GET',
+//     headers: {
+//       accept: 'application/json',
+//       Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhOTY0MjBmM2IwNDFlMDkxMjgyZmVjZGRlMjU2NTAzZiIsInN1YiI6IjY1YjBlNmI5ZWEzN2UwMDE5M2U0NjI5NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Bg_SH3Y0udfbjbl0qYoxzAEj2z0_35g26sXN6mjxZnQ'
+//     }
+//   };
 
-let data2 = fetchMovieRecommendations(787699);
-let results2 = data2.results;
+//   fetch(url, options)
+//     .then(res => res.json())
+//     .then(json => console.log(json))
+//     .catch(err => console.error('error:' + err));
+// }
 
+function fetchMovieDetails(movie) {
+  const url = 'https://api.themoviedb.org/3/search/movie?query=' + movie + '&include_adult=true&language=en-US&page=1';
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhOTY0MjBmM2IwNDFlMDkxMjgyZmVjZGRlMjU2NTAzZiIsInN1YiI6IjY1YjBlNmI5ZWEzN2UwMDE5M2U0NjI5NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Bg_SH3Y0udfbjbl0qYoxzAEj2z0_35g26sXN6mjxZnQ'
+    }
+  };
 
-console.log(results2);
+  fetch(url, options)
+    .then(res => res.json())
+    .then(json => console.log(json))
+  .catch(err => console.error('error:' + err));
+}
+
+async function fetchMovieDetails(movie) {
+  const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(movie)}&include_adult=false&language=en-US&page=1`;
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhOTY0MjBmM2IwNDFlMDkxMjgyZmVjZGRlMjU2NTAzZiIsInN1YiI6IjY1YjBlNmI5ZWEzN2UwMDE5M2U0NjI5NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Bg_SH3Y0udfbjbl0qYoxzAEj2z0_35g26sXN6mjxZnQ'
+    }
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    return data; // This returns the whole JSON response including the 'results' array
+  } catch (err) {
+    console.error('error fetching movie details:', err);
+  }
+}
+
+(async () => {
+  const data3 = await fetchMovieDetails('spiderman');
+  if (data3 && data3.results) {
+    let results3 = data3.results[0].poster_path; // Safely access the first item in results
+    console.log(results3);
+  } else {
+    console.log("No results found or there was an error fetching the details.");
+  }
+})();
+
+// let data = fetchPopularMovies();
+// let results = data.results;
+
+// let data2 = fetchMovieRecommendations(787699);
+// let results2 = data2.results;
+
+// let data3 = fetchMovieDetails('spiderman');
+// let results3 = data3.results[0];
+
+// console.log(results3);
