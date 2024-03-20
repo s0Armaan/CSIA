@@ -193,22 +193,39 @@
                     <div class="grid grid-cols-12 gap-8 mt-8">
                         <div class="col-span-7">
                             <div class="fun-facts p-6 rounded-xl animated fadeInUp">
-                                <div class="fun-facts-title text-lg font-semibold mb-4">FUN FACTS</div>
-                                <div class="h-32 bg-white rounded-xl p-4"></div>
+                                <div class="fun-facts-title text-lg font-semibold mb-4" style="font-family: 'Arial Black', sans-serif; color: #007bff;">FUN FACTS</div>
+                                <div class="h-32 bg-white rounded-xl p-4" style="overflow-wrap: break-word; font-family: 'Arial', sans-serif; color: #333;">
+                                    James Bond's "Shaken, Not Stirred": The iconic James Bond preference for his martinis to be "shaken, not stirred" might have less to do with taste and more with the character's savvy nature. Scientists suggest that shaking a martini dissolves more antioxidants than stirring, potentially helping Bond avoid hangovers and stay in top spy condition.
+                                </div>
                             </div>
                         </div>
                         <div class="col-span-5">
                             <div class="trivia p-6 rounded-xl animated fadeInUp">
-                                <div class="trivia-title text-lg font-semibold mb-4">TRIVIA</div>
-                                <!-- Placeholder for trivia -->
-                                <div class="h-32 bg-white rounded-xl p-4"></div>
+                                <div class="trivia-title text-lg font-semibold mb-4" style="font-family: 'Arial Black', sans-serif;">TRIVIA</div>
+                                <div class="h-32 bg-white rounded-xl p-4">
+                                    <div id="trivia-question" class="text-center">
+                                        Which horror movie's terrifying sounds were partly made by a cat?
+                                    </div>
+                                    <div id="trivia-answer" class="text-center hidden">
+                                        The alien noises in "Alien" (1979) included modified recordings of a cat hissing.
+                                    </div>
+                                    <button id="show-answer-button" class="text-blue-500 hover:underline mt-2">Show Answer</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                       
+                       <script>
+                            const showAnswerButton = document.getElementById('show-answer-button');
+                            const triviaAnswer = document.getElementById('trivia-answer');
+
+                            showAnswerButton.addEventListener('click', () => {
+                                triviaAnswer.classList.toggle('hidden');
+                            });
+                        </script>
 
     <script>
         const searchButton = document.getElementById('search-button');

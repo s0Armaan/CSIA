@@ -65,6 +65,7 @@
             font-size: 20px;
             font-weight: bold;
             margin-bottom: 10px;
+            color: #333;
         }
         .recommendations__list {
             display: flex;
@@ -75,72 +76,130 @@
             width: calc(33.33% - 10px);
             margin-bottom: 20px;
             animation: scale-in 1s ease-in-out;
+            background-color: #f9fafb;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .recommendations__item img {
             width: 100%;
             height: auto;
+            border-radius: 8px;
         }
         .recommendations__item-title {
             font-size: 16px;
             font-weight: bold;
             margin-top: 10px;
+            color: #333;
         }
         
     </style>
 </head>
 <body>
-    <!-- Page Content -->
+
+    <div class="container mx-auto px-4 py-8" style="margin-top: 1rem;">
+        <div class="header animated fadeIn">
+            <a href="/home" class="header__link" style="color: #eb2711; font-size: 24px; text-decoration: none;">Popcorn Preferences</a>
+        </div>
+    </div>
+
+    <style>
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: slide-in 1s ease-in-out;
+        }
+
+        .header__link {
+            font-family: 'Arial', sans-serif;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .header__link:hover {
+            color: #4caf50;
+        }
+
+        @keyframes slide-in {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+
+
     <div class="container">
-        <div class="movie-details">
-            <!-- Movie Poster -->
+        <div class="movie-details animated fadeIn">
             <div class="movie-details__poster">
                 <img src="https://image.tmdb.org/t/p/w500<%= details.poster_path %>" alt="<%= details.title %> Poster">
             </div>
-            <!-- Movie Details -->
             <div class="movie-details__content">
-                <h1 class="movie-details__title"><%= details.title %></h1>
-                <p class="movie-details__overview"><%= details.overview %></p>
-                <!-- Additional details here -->
+                <h1 class="movie-details__title" style="color: #ff5722;"><%= details.title %></h1>
+                <p class="movie-details__overview" style="color: #333;"><%= details.overview %></p>
                 <div class="movie-details__additional">
-                    <span class="movie-details__release-date"><%= details.release_date %></span>
-                    <span class="movie-details__vote-average"><%= details.vote_average %> / 10</span>
+                    <span class="movie-details__release-date" style="color: #888;"><%= details.release_date %></span>
+                    <span class="movie-details__vote-average" style="color: #4caf50;"><%= details.vote_average %> / 10</span>
                 </div>
-                <!-- Genre, Director, etc. -->
-            </div>
-        </div>
-        <div class="recommendations">
-            <h2 class="recommendations__title">Recommendations</h2>
-            <div class="recommendations__list">
-                <!-- Recommendation items here -->
             </div>
         </div>
     </div>
 
-    <div class="container mx-auto px-4 py-8">
-
-            <form action="/search" method="GET">
-                <div class="mt-8 grid grid-cols-3 gap-8">
-                    <% if (recommendations) { %>
-                        <div class="recommendations__list overflow-x-auto flex flex-nowrap">
-                            <% recommendations.forEach(function(recommendation) { %>
-                            <div class="bg-gray-50 p-4 rounded-xl animated slideIn">
-                                <button type="submit" name="image" value="<%= recommendation.title %>">
-                                    <img src="https://image.tmdb.org/t/p/w500<%= recommendation.poster_path %>" alt="<%= recommendation.title %>" class="w-60 h-80 rounded-lg mb-4">
-                                </button>                                            
-                                <div name="title" id=class="text-center text-sm"><%= recommendation.title %></div>
-                            </div>
-                            <% }) %>
+    <div class="container mx-auto px-4 py-8" style="margin-top: 1rem;">
+        <h2 class="recommendations__title" style="text-align: center; font-size: 25px;">Recommendations</h2>
+        <form action="/search" method="GET">
+            <div class="grid gap-8">
+                <% if (recommendations) { %>
+                    <div class="recommendations__list overflow-x-auto flex flex-nowrap">
+                        <% recommendations.forEach(function(recommendation) { %>
+                        <div class="bg-gray-50 p-4 rounded-xl animated slideIn">
+                            <button type="submit" name="image" value="<%= recommendation.title %>">
+                                <img src="https://image.tmdb.org/t/p/w500<%= recommendation.poster_path %>" alt="<%= recommendation.title %>" class="h-80 rounded-lg mb-4" style="min-width: 13rem;">
+                            </button>                                            
+                            <div name="title" id=class="text-center text-sm" style="text-align: -webkit-center;"><%= recommendation.title %></div>
                         </div>
-                    <% } else { %>
-                        <div>No movies to display.</div>
-                    <% } %>
-                </div>
-            </form>
-        </div>
+                        <% }) %>
+                    </div>
+                <% } else { %>
+                    <div>No movies to display.</div>
+                <% } %>
+            </div>
+        </form>
+    </div>
 
 
-    <script>
 
-    </script>
+    <style>
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .header__image {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .header__link {
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff5722;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .header__link:hover {
+            color: #ff9800;
+        }
+    </style>
 </body>
 </html>
