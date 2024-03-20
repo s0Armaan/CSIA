@@ -83,20 +83,41 @@ async function fetchMovieDetails(movie) {
   }
 }
 
-(async () => {
-  const data3 = await fetchMovieDetails('spiderman');
-  if (data3 && data3.results) {
-    let results3 = data3.results[0]; // Safely access the first item in results
-    console.log(results3);
-  } else {
-    console.log("No results found or there was an error fetching the details.");
-  }
-})();
+// (async () => {
+//   const data3 = await fetchMovieDetails('spiderman');
+//   if (data3 && data3.results) {
+//     let results3 = data3.results[0]; // Safely access the first item in results
+//     console.log(results3);
+//   } else {
+//     console.log("No results found or there was an error fetching the details.");
+//   }
+// })();
+
+function fetchMovieByGenre(genreId) {
+  const url = 'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=' + genreId;
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhOTY0MjBmM2IwNDFlMDkxMjgyZmVjZGRlMjU2NTAzZiIsInN1YiI6IjY1YjBlNmI5ZWEzN2UwMDE5M2U0NjI5NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Bg_SH3Y0udfbjbl0qYoxzAEj2z0_35g26sXN6mjxZnQ'
+    }
+  };
+
+  return fetch(url, options)
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error('error:' + err));
+}
+
+let data = fetchMovieByGenre(16)
+let data2 = fetchMovieRecommendations(787699);
+let data3 = fetchPopularMovies()
+
+console.log(data)
 
 // let data = fetchPopularMovies();
 // let results = data.results;
 
-// let data2 = fetchMovieRecommendations(787699);
 // let results2 = data2.results;
 
 // let data3 = fetchMovieDetails('spiderman');

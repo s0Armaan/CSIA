@@ -45,10 +45,29 @@ function fetchMovieDetails(movie) {
     }
   };
 
-  fetch(url, options)
+  return fetch(url, options)
     .then(res => res.json())
     .then(json => console.log(json))
     .catch(err => console.error('error:' + err));
+}
+
+function fetchMovieByGenre(genreId) {
+  const url = 'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=' + genreId;
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhOTY0MjBmM2IwNDFlMDkxMjgyZmVjZGRlMjU2NTAzZiIsInN1YiI6IjY1YjBlNmI5ZWEzN2UwMDE5M2U0NjI5NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Bg_SH3Y0udfbjbl0qYoxzAEj2z0_35g26sXN6mjxZnQ'
+    }
+  };
+
+  return fetch(url, options)
+    .then(res => res.json())
+    .then(json => json.results) // Extracting the 'results' array from the JSON response
+    .catch(err => {
+      console.error('error:' + err);
+      throw err; // Rethrow the error to be caught by the route handler
+    });
 }
 
 async function fetchMovieDetails(movie) {
@@ -84,7 +103,7 @@ app.use(bodyParser.json());
 
 const db = new sqlite3.Database('database.db');
 db.serialize(() => {
-    db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, username TEXT, password TEXT)");
+  db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, username TEXT, password TEXT)");
 });
 
 app.get('/static/popcorn.png', (req, res) => {
@@ -102,14 +121,14 @@ app.get('/static/login_background.jpg', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-    db.run('SELECT * FROM users', (err, results) => {
-      if (err) {
-        console.error('Error fetching data from the database:', err);
-        res.status(500).send('Internal Server Error');
-      } else {
-        res.json(results);
-      }
-    });
+  db.run('SELECT * FROM users', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from the database:', err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      res.json(results);
+    }
+  });
 });
 
 app.get('/', (req, res) => {
@@ -121,14 +140,23 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/home', (req, res) => {
-  const movieId = '787699'; 
+  const movieId = '787699';
+  let genreId;
+
+  if (req.query.genreId != undefined && req.query.genreId != null) {
+    genreId = req.query.genreId
+  } else {
+    genreId = '28'
+  }
+
+  console.log(genreId)
 
   Promise.all([
     fetchPopularMovies(),
-    fetchMovieRecommendations(movieId)
+    fetchMovieByGenre(genreId)
   ])
   .then(([movies, recommendations]) => {
-    // console.log(movies, recommendations); // Log to verify data integrity
+    console.log("rec"); // Log to verify data integrity
     res.render('home', { movies: movies, recommendations: recommendations });
   })
   .catch(err => {
@@ -178,35 +206,6 @@ app.get('/search', async (req, res) => {
     res.redirect('/home?error=An+error+occurred+while+processing+your+search');
   }
 });
-
-// app.get('/search', (req, res) => {
-//   let name;
-//   if (req.query.image) {
-//     name = req.query.image;
-//   } else if (req.query.searchbar) {
-//     name = req.query.searchbar;
-//   };
-  
-//   console.log('User search input:', name); // Log the user search input 
-
-//   (async () => {
-//     const data3 = await fetchMovieDetails(name);
-
-//     if (data3 && data3.results) {
-//       let movie = data3.results[0];
-//       console.log(movie);
-//       if (movie === null || movie === undefined) {
-//         movie = "No results found or there was an error fetching the details.";
-//         res.redirect('/home?error=Movie+not+found');
-//       } else {
-//         res.render('search', { movie: movie }); // Safely access the first item in results
-//         console.log(movie);  
-//       }
-//     } else {
-//       console.log("No results found or there was an error fetching the details.");
-//     }
-//   })();
-// });
 
 app.get('/image_search', (req, res) => {
   const name = req.query.movieTitle;
@@ -280,4 +279,3 @@ app.get('/movie/:id', (req, res) => {
     res.status(500).send('Error fetching movie details');
   });
 });
-
