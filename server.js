@@ -207,23 +207,6 @@ app.get('/search', async (req, res) => {
   }
 });
 
-app.get('/image_search', (req, res) => {
-  const name = req.query.movieTitle;
-  console.log('User search input:', name); // Log the user search input 
-
-  (async () => {
-    const data3 = await fetchMovieDetails(name);
-    if (data3 && data3.results) {
-      let movie = data3.results[0];
-      res.render('search', { movie: movie }); // Safely access the first item in results
-      console.log(movie);
-    } else {
-      res.render('search', { movie: movie });
-      console.log("No results found or there was an error fetching the details.");
-    }
-  })();
-});
-
 app.post('/login', (req, res) => {
 
   const { username, password } = req.body;
