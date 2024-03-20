@@ -92,19 +92,6 @@
             margin-top: 10px;
             color: #333;
         }
-        
-    </style>
-</head>
-<body>
-<<<<<<< Updated upstream
-
-    <div class="container mx-auto px-4 py-8" style="margin-top: 1rem;">
-        <div class="header animated fadeIn">
-            <a href="/home" class="header__link" style="color: #eb2711; font-size: 24px; text-decoration: none;">Popcorn Preferences</a>
-        </div>
-    </div>
-
-    <style>
         .header {
             display: flex;
             justify-content: center;
@@ -131,29 +118,53 @@
                 opacity: 1;
             }
         }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: slide-in 1s ease-in-out;
+        }
+
+        .header__link {
+            font-family: 'Arial', sans-serif;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .header__link:hover {
+            color: #4caf50;
+        }
+
+        @keyframes slide-in {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
     </style>
-
-
-    <div class="container">
-        <div class="movie-details animated fadeIn">
-=======
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8" style="margin-top: 1rem;">
+        <div class="header animated fadeIn">
+            <a href="/home" class="header__link" style="color: #eb2711; font-size: 24px; text-decoration: none;">Popcorn Preferences</a>
+        </div>
+    </div>
     <div class="container">
         <div class="movie-details">
->>>>>>> Stashed changes
             <div class="movie-details__poster">
                 <img src="https://image.tmdb.org/t/p/w500<%= details.poster_path %>" alt="<%= details.title %> Poster">
             </div>
             <div class="movie-details__content">
-<<<<<<< Updated upstream
                 <h1 class="movie-details__title" style="color: #ff5722;"><%= details.title %></h1>
                 <p class="movie-details__overview" style="color: #333;"><%= details.overview %></p>
-=======
-                <h1 class="movie-details__title"><%= details.title %></h1>
-                <p class="movie-details__overview"><%= details.overview %></p>
->>>>>>> Stashed changes
                 <div class="movie-details__additional">
                     <span class="movie-details__release-date" style="color: #888;"><%= details.release_date %></span>
-                    <span class="movie-details__vote-average" style="color: #4caf50;"><%= details.vote_average %> / 10</span>
+                    <span class="movie-details__vote-average" style="color: #4caf50;"><%= Math.round(details.vote_average * 10) / 10 %> / 10</span>
                 </div>
             </div>
         </div>
@@ -180,39 +191,5 @@
             </div>
         </form>
     </div>
-<<<<<<< Updated upstream
-
-
-
-    <style>
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .header__image {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-        }
-
-        .header__link {
-            font-family: 'Arial', sans-serif;
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff5722;
-            text-decoration: none;
-            text-transform: uppercase;
-            transition: color 0.3s ease-in-out;
-        }
-
-        .header__link:hover {
-            color: #ff9800;
-        }
-    </style>
-=======
->>>>>>> Stashed changes
 </body>
 </html>
