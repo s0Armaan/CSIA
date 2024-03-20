@@ -64,7 +64,7 @@ async function fetchMovieDetails(movie) {
   try {
     const response = await fetch(url, options);
     const data = await response.json();
-    return data; // This returns the whole JSON response including the 'results' array
+    return data; // Return the data from the response
   } catch (err) {
     console.error('error fetching movie details:', err);
   }
@@ -121,7 +121,7 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/home', (req, res) => {
-  const movieId = '787699'; // Example movie ID, replace with dynamic logic if needed
+  const movieId = '787699'; 
 
   Promise.all([
     fetchPopularMovies(),
@@ -137,48 +137,80 @@ app.get('/home', (req, res) => {
   });
 });
 
-app.get('/search', (req, res) => {
+app.get('/search', async (req, res) => {
   let name;
   if (req.query.image) {
     name = req.query.image;
   } else if (req.query.searchbar) {
     name = req.query.searchbar;
   };
-  
+
   console.log('User search input:', name); // Log the user search input (for debugging purposes)
 
-  (async () => {
-    const data3 = await fetchMovieDetails(name);
-    fetchMovieRecommendations(query) // Implement this function if not already present
-        .then(movieId => {
-          
-        })
-        .then(recommendations => {
-            res.json({ recommendations: recommendations }); // Send recommendations back to the client
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            res.status(500).json({ error: 'Failed to fetch recommendations' });
-        });
-    if (data3 && data3.results) {
-      let movie = data3.results[0];
-      console.log(movie);
-      if (movie === null || movie === undefined) {
-        movie = "No results found or there was an error fetching the details.";
+  try {
+    // Fetch movie details based on search term to get the ID
+    const data = await fetchMovieDetails(name);
+    
+    if (data && data.results && data.results.length > 0) {
+      const details = data.results[0]; // Assuming you want the first result
+      const movieId = data.results[0].id;
+
+      if (details === null || details === undefined) {
+        details = "No results found or there was an error fetching the details.";
         res.redirect('/home?error=Movie+not+found');
       } else {
-        res.render('search', { movie: movie }); // Safely access the first item in results
-        console.log(movie);  
+        // Fetch recommendations based on the movie ID
+        const recommendations = await fetchMovieRecommendations(movieId);
+
+        // Check if recommendations exist and render them
+        if (recommendations && recommendations.length > 0) {
+          res.render('search', { recommendations: recommendations, details: details }); // Modify 'search' template to iterate over recommendations and display them
+        } else {
+          res.redirect('/home?error=No+recommendations+found+for+the+provided+search+term');
+        }
       }
+
     } else {
-      console.log("No results found or there was an error fetching the details.");
+      res.redirect('/home?error=Movie+not+found');
     }
-  })();
+  } catch (error) {
+    console.error('Error during movie search:', error);
+    res.redirect('/home?error=An+error+occurred+while+processing+your+search');
+  }
 });
+
+// app.get('/search', (req, res) => {
+//   let name;
+//   if (req.query.image) {
+//     name = req.query.image;
+//   } else if (req.query.searchbar) {
+//     name = req.query.searchbar;
+//   };
+  
+//   console.log('User search input:', name); // Log the user search input 
+
+//   (async () => {
+//     const data3 = await fetchMovieDetails(name);
+
+//     if (data3 && data3.results) {
+//       let movie = data3.results[0];
+//       console.log(movie);
+//       if (movie === null || movie === undefined) {
+//         movie = "No results found or there was an error fetching the details.";
+//         res.redirect('/home?error=Movie+not+found');
+//       } else {
+//         res.render('search', { movie: movie }); // Safely access the first item in results
+//         console.log(movie);  
+//       }
+//     } else {
+//       console.log("No results found or there was an error fetching the details.");
+//     }
+//   })();
+// });
 
 app.get('/image_search', (req, res) => {
   const name = req.query.movieTitle;
-  console.log('User search input:', name); // Log the user search input (for debugging purposes)
+  console.log('User search input:', name); // Log the user search input 
 
   (async () => {
     const data3 = await fetchMovieDetails(name);

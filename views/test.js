@@ -77,7 +77,7 @@ async function fetchMovieDetails(movie) {
   try {
     const response = await fetch(url, options);
     const data = await response.json();
-    return data; // This returns the whole JSON response including the 'results' array
+    return data; 
   } catch (err) {
     console.error('error fetching movie details:', err);
   }
@@ -86,7 +86,7 @@ async function fetchMovieDetails(movie) {
 (async () => {
   const data3 = await fetchMovieDetails('spiderman');
   if (data3 && data3.results) {
-    let results3 = data3.results[0].poster_path; // Safely access the first item in results
+    let results3 = data3.results[0]; // Safely access the first item in results
     console.log(results3);
   } else {
     console.log("No results found or there was an error fetching the details.");

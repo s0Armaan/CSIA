@@ -94,16 +94,16 @@
         <div class="movie-details">
             <!-- Movie Poster -->
             <div class="movie-details__poster">
-                <img src="https://image.tmdb.org/t/p/w500<%= movie.poster_path %>" alt="<%= movie.title %> Poster">
+                <img src="https://image.tmdb.org/t/p/w500<%= details.poster_path %>" alt="<%= details.title %> Poster">
             </div>
             <!-- Movie Details -->
             <div class="movie-details__content">
-                <h1 class="movie-details__title"><%= movie.title %></h1>
-                <p class="movie-details__overview"><%= movie.overview %></p>
+                <h1 class="movie-details__title"><%= details.title %></h1>
+                <p class="movie-details__overview"><%= details.overview %></p>
                 <!-- Additional details here -->
                 <div class="movie-details__additional">
-                    <span class="movie-details__release-date"><%= movie.release_date %></span>
-                    <span class="movie-details__vote-average"><%= movie.vote_average %> / 10</span>
+                    <span class="movie-details__release-date"><%= details.release_date %></span>
+                    <span class="movie-details__vote-average"><%= details.vote_average %> / 10</span>
                 </div>
                 <!-- Genre, Director, etc. -->
             </div>
@@ -117,67 +117,30 @@
     </div>
 
     <div class="container mx-auto px-4 py-8">
-        <form action="/search" method="GET">
-            <div class="mt-8 grid grid-cols-3 gap-8">
-                <% if (recommendations) { %>
-                    <% recommendations.forEach(function(recommendation) { %>
-                    <div class="bg-gray-50 p-4 rounded-xl animated slideIn">
-                        <button type="submit" name="image" value="<%= recommendation.title %>">
-                            <img src="https://image.tmdb.org/t/p/w500<%= recommendation.poster_path %>" alt="<%= recommendation.title %>" class="w-full h-auto rounded-lg mb-4">
-                        </button>                                            
-                        <div name="title" id=class="text-center text-sm"><%= recommendation.title %></div>
-                    </div>
-                    <% }) %>
-                <% } else { %>
-                    <div>No movies to display.</div>
-                <% } %>
-            </div>
-        </form>
-        <!-- Page Content -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white shadow-xl rounded-lg overflow-hidden mb-8">
-                <!-- Movie Details -->
-                <div class="md:flex">
-                    <!-- Movie Poster -->
-                    <div class="md:w-1/4 bg-cover bg-center" style="background-image: url('https://image.tmdb.org/t/p/w500<%= movie.poster_path %>')">
-                        <!-- Image will cover this div -->
-                    </div>
-                    <!-- Movie Content -->
-                    <div class="md:w-3/4 p-4 md:p-8">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2"><%= movie.title %></h2>
-                        <p class="text-gray-700 mb-4"><%= movie.overview %></p>
-                        <!-- Additional movie details here -->
-                        <div class="flex mb-4">
-                            <span class="text-gray-600 mr-2"><%= movie.release_date %></span>
-                            <span class="text-gray-600"><%= movie.vote_average %> / 10</span>
+
+            <form action="/search" method="GET">
+                <div class="mt-8 grid grid-cols-3 gap-8">
+                    <% if (recommendations) { %>
+                        <div class="recommendations__list overflow-x-auto flex flex-nowrap">
+                            <% recommendations.forEach(function(recommendation) { %>
+                            <div class="bg-gray-50 p-4 rounded-xl animated slideIn">
+                                <button type="submit" name="image" value="<%= recommendation.title %>">
+                                    <img src="https://image.tmdb.org/t/p/w500<%= recommendation.poster_path %>" alt="<%= recommendation.title %>" class="w-60 h-80 rounded-lg mb-4">
+                                </button>                                            
+                                <div name="title" id=class="text-center text-sm"><%= recommendation.title %></div>
+                            </div>
+                            <% }) %>
                         </div>
-                        <!-- Genre, Director, etc. -->
-                    </div>
+                    <% } else { %>
+                        <div>No movies to display.</div>
+                    <% } %>
                 </div>
-            </div>
+            </form>
         </div>
-    </div>
+
 
     <script>
-        // // Assuming your EJS template provides the movie ID as `movie.id`
-        // const movieId = '<%= movie.id %>'; // This will be dynamically filled by your EJS template server-side
-        // const apiKey = 'YOUR_TMDB_API_KEY'; // Replace with your actual TMDB API key
-        // const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`;
 
-        // fetch(url)
-        //     .then(res => res.json())
-        //     .then(movieDetails => {
-        //         // Instead of console.log, you use the data to display on the page
-        //         displayMovieDetails(movieDetails);
-        //     })
-        //     .catch(err => console.error('error:' + err));
-
-        // function displayMovieDetails(details) {
-        //     // Here you can access the movie details and render them in your HTML
-        //     // For example, if you have an element with the ID 'movie-title' in your HTML, you can do:
-        //     document.getElementById('movie-title').textContent = details.title;
-        //     // Repeat for other elements like overview, poster, rating etc.
-        // }
     </script>
 </body>
 </html>
