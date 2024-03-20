@@ -177,7 +177,7 @@
             <div class="grid gap-8">
                 <% if (recommendations) { %>
                     <div class="recommendations__list overflow-x-auto flex flex-nowrap">
-                        <% recommendations.forEach(function(recommendation) { %>
+                        <% recommendations.forEach(function(recommendation) { %>  // Loop through the recommendations
                         <div class="bg-gray-50 p-4 rounded-xl animated slideIn">
                             <button type="submit" name="image" value="<%= recommendation.title %>">
                                 <img src="https://image.tmdb.org/t/p/w500<%= recommendation.poster_path %>" alt="<%= recommendation.title %>" class="h-80 rounded-lg mb-4" style="min-width: 13rem;">

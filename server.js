@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const fetch = require('node-fetch');
 const sqlite3 = require('sqlite3').verbose();
+const bcrypt = require('bcrypt');
 const app = express();
 const PORT = 3000;
 
@@ -208,7 +209,7 @@ app.post('/login', (req, res) => {
 
   const { username, password } = req.body;
 
-  const sql = 'SELECT * FROM users WHERE username = ? OR email = ? AND password = ?';
+  const sql = 'SELECT * FROM users WHERE (username = ? OR email = ?) AND password = ?';
 
   db.get(sql, [username, username, password], (err, row) => {
   if (err) {
@@ -232,18 +233,34 @@ app.get('/register', (req, res) => {
 });
   
 app.post('/register', (req, res) => {
-    const { username, email, password } = req.body;
-  
-    const sql = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
-    db.run(sql, [username, email, password], (err, result) => {
-      if (err) {
-        console.error('Error registering user:', err);
-        res.status(500).send('Internal Server Error');
-      } else {
-        console.log('User registered successfully');
-        res.redirect('/login');
-      }
-    });
+  const { username, email, password } = req.body;
+
+  // Generate a salt to use for hashing
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) {
+      console.error('Error generating salt:', err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      // Hash the password using the generated salt
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err) {
+          console.error('Error hashing password:', err);
+          res.status(500).send('Internal Server Error');
+        } else {
+          const sql = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
+          db.run(sql, [username, email, hash], (err, result) => {
+            if (err) {
+              console.error('Error registering user:', err);
+              res.status(500).send('Internal Server Error');
+            } else {
+              console.log('User registered successfully');
+              res.redirect('/login');
+            }
+          });
+        }
+      });
+    }
+  });
 });
 
 app.listen(PORT, () => {
