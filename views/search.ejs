@@ -152,7 +152,7 @@
 <body>
     <div class="container mx-auto px-4 py-8" style="margin-top: 1rem;">
         <div class="header animated fadeIn">
-            <a href="/home" class="header__link" style="color: #eb2711; font-size: 24px; text-decoration: none;">Popcorn Preferences</a>
+            <a href="/home" class="header__link" style="color: #eb2711; font-size: 24px; text-decoration: none; font-family: 'Arial', sans-serif; font-weight: bold;">Popcorn Preferences</a>
         </div>
     </div>
     <div class="container">
@@ -177,7 +177,7 @@
             <div class="grid gap-8">
                 <% if (recommendations) { %>
                     <div class="recommendations__list overflow-x-auto flex flex-nowrap">
-                        <% recommendations.forEach(function(recommendation) { %>
+                        <% recommendations.forEach(function(recommendation) { %>  // Loop through the recommendations
                         <div class="bg-gray-50 p-4 rounded-xl animated slideIn">
                             <button type="submit" name="image" value="<%= recommendation.title %>">
                                 <img src="https://image.tmdb.org/t/p/w500<%= recommendation.poster_path %>" alt="<%= recommendation.title %>" class="h-80 rounded-lg mb-4" style="min-width: 13rem;">
